@@ -7,6 +7,8 @@
 [![telegram](https://img.shields.io/badge/telegram-blue?logo=telegram)](https://t.me/+U_5si6PhWykxZTI1)
 [![LICENSE](https://img.shields.io/crates/l/leetcode-cli.svg)](https://choosealicense.com/licenses/mit/)
 
+Modify for **leetcode.cn**
+
 ## Installing
 
 ```sh
@@ -41,7 +43,7 @@ leetcode completions fish
 
 ## Usage
 
-**Make sure you have logged in to `leetcode.com` with `Firefox`**. See [Cookies](#cookies) for why you need to do this first.
+**Make sure you have logged in to `leetcode.cn` with `Firefox`**. See [Cookies](#cookies) for why you need to do this first.
 
 ```sh
 leetcode 0.4.0
@@ -293,7 +295,7 @@ Open Firefox, press F12, and click `Storage` tab.
 
 #### Step 2
 
-Expand `Cookies` tab on the left and select https://leetcode.com.
+Expand `Cookies` tab on the left and select https://leetcode.cn.
 
 #### Step 2
 

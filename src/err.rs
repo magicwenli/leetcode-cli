@@ -37,7 +37,7 @@ impl std::fmt::Debug for Error {
                  more info please checkout this: \
                  https://github.com/clearloop/leetcode-cli/blob/master/README.md#cookies",
                 e,
-                "please make sure you have logined in leetcode.com with chrome. "
+                "please make sure you have logined in leetcode.cn with chrome. "
                     .yellow()
                     .bold(),
             ),
@@ -56,9 +56,10 @@ impl std::fmt::Debug for Error {
             Error::DecryptError => write!(f, "{} openssl decrypt failed", e),
             Error::ScriptError(s) => write!(f, "{} {}", e, s),
             Error::SilentError => write!(f, ""),
-            Error::NoneError => write!(f,
-                "json from response parse failed, please open a new issue at: {}.",
-                "https://github.com/clearloop/leetcode-cli/".underline(),
+            Error::NoneError => panic!(
+                "{} {}",
+                e,
+                "this is a bug, please report it to"
             ),
             Error::ChromeNotLogin => write!(f, "maybe you not login on the Chrome, you can login and retry."),
             Error::Anyhow(e) => write!(f, "{} {}", e, e),

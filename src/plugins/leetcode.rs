@@ -153,12 +153,12 @@ impl LeetCode {
         trace!("Requesting daily problem...");
         let url = &self.conf.sys.urls.graphql;
         let mut json: Json = HashMap::new();
-        json.insert("operationName", "daily".to_string());
+        json.insert("operationName", "questionOfToday".to_string());
         json.insert(
             "query",
             vec![
-                "query daily {",
-                "  activeDailyCodingChallengeQuestion {",
+                "query questionOfToday {",
+                "  todayRecord {",
                 "    question {",
                 "      questionFrontendId",
                 "    }",
@@ -167,7 +167,7 @@ impl LeetCode {
             ]
             .join("\n"),
         );
-
+    
         Req {
             default_headers: self.default_headers,
             refer: None,

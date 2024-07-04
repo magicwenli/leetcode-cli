@@ -26,7 +26,6 @@ __COMMENT_LEADING__ __CODE_END_MARKER__
 __COMMENT_SUFFIX___";
 }
 
-
 fn default_pick() -> String {
     "${fid}.${slug}".into()
 }

@@ -294,7 +294,6 @@ impl Cache {
 
         File::open(code_path(&p, None)?)?.read_to_string(&mut code)?;
 
-
         let code_start_str = CODE_START_TEMPLATE
             .replace(CODE_START_MARKER, &conf.code.start_marker)
             .replace(COMMENT_LEADING, &conf.code.comment_leading)

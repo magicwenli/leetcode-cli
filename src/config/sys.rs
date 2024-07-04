@@ -33,45 +33,33 @@ pub struct Urls {
 
 impl Default for Urls {
     fn default() -> Self {
-        Self {
-            base: "https://leetcode.com".into(),
-            graphql: "https://leetcode.com/graphql".into(),
-            login: "https://leetcode.com/accounts/login/".into(),
-            problems: "https://leetcode.com/api/problems/$category/".into(),
-            problem: "https://leetcode.com/problems/$slug/description/".into(),
-            tag: "https://leetcode.com/tag/$slug/".into(),
-            test: "https://leetcode.com/problems/$slug/interpret_solution/".into(),
-            session: "https://leetcode.com/session/".into(),
-            submit: "https://leetcode.com/problems/$slug/submit/".into(),
-            submissions: "https://leetcode.com/submissions/detail/$id/".into(),
-            submission: "https://leetcode.com/submissions/detail/$id/".into(),
-            verify: "https://leetcode.com/submissions/detail/$id/check/".into(),
-            favorites: "https://leetcode.com/list/api/questions".into(),
-            favorite_delete: "https://leetcode.com/list/api/questions/$hash/$id".into(),
-            solutions: "https://leetcode.com/problems/$slug/solutions/".into(),
-        }
+        Self::new_with_url("leetcode.com")
     }
 }
 
 impl Urls {
-    pub fn new_with_leetcode_cn() -> Self {
+    fn new_with_url(url: &str) -> Self {
         Self {
-            base: "https://leetcode.cn".into(),
-            graphql: "https://leetcode.cn/graphql".into(),
-            login: "https://leetcode.cn/accounts/login/".into(),
-            problems: "https://leetcode.cn/api/problems/$category/".into(),
-            problem: "https://leetcode.cn/problems/$slug/description/".into(),
-            tag: "https://leetcode.cn/tag/$slug/".into(),
-            test: "https://leetcode.cn/problems/$slug/interpret_solution/".into(),
-            session: "https://leetcode.cn/session/".into(),
-            submit: "https://leetcode.cn/problems/$slug/submit/".into(),
-            submissions: "https://leetcode.cn/submissions/detail/$id/".into(),
-            submission: "https://leetcode.cn/submissions/detail/$id/".into(),
-            verify: "https://leetcode.cn/submissions/detail/$id/check/".into(),
-            favorites: "https://leetcode.cn/list/api/questions".into(),
-            favorite_delete: "https://leetcode.cn/list/api/questions/$hash/$id".into(),
-            solutions: "https://leetcode.cn/problems/$slug/solutions/?currentPage=1&orderBy=most_votes&query=".into(),
+            base: format!("https://{}", url),
+            graphql: format!("https://{}/graphql", url),
+            login: format!("https://{}/accounts/login/", url),
+            problems: format!("https://{}/api/problems/$category/", url),
+            problem: format!("https://{}/problems/$slug/description/", url),
+            tag: format!("https://{}/tag/$slug/", url),
+            test: format!("https://{}/problems/$slug/interpret_solution/", url),
+            session: format!("https://{}/session/", url),
+            submit: format!("https://{}/problems/$slug/submit/", url),
+            submissions: format!("https://{}/submissions/detail/$id/", url),
+            submission: format!("https://{}/submissions/detail/$id/", url),
+            verify: format!("https://{}/submissions/detail/$id/check/", url),
+            favorites: format!("https://{}/list/api/questions", url),
+            favorite_delete: format!("https://{}/list/api/questions/$hash/$id", url),
+            solutions: format!("https://{}/problems/$slug/solutions/", url),
         }
+    }
+
+    pub fn new_with_leetcode_cn() -> Self {
+        Self::new_with_url("leetcode.cn")
     }
 
     /// problem url with specific `$slug`

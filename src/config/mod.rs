@@ -18,6 +18,7 @@ mod storage;
 mod sys;
 
 pub use cookies::LeetcodeSite;
+pub use code::consts;
 
 /// Sync with `~/.leetcode/leetcode.toml`
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]

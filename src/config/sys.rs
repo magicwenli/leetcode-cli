@@ -28,6 +28,7 @@ pub struct Urls {
     pub verify: String,
     pub favorites: String,
     pub favorite_delete: String,
+    pub discuss: String,
 }
 
 impl Default for Urls {
@@ -47,6 +48,7 @@ impl Default for Urls {
             verify: "https://leetcode.com/submissions/detail/$id/check/".into(),
             favorites: "https://leetcode.com/list/api/questions".into(),
             favorite_delete: "https://leetcode.com/list/api/questions/$hash/$id".into(),
+            discuss: "https://leetcode.com/problems/$slug/discussion/?currentPage=1&orderBy=most_votes&query=".into(),
         }
     }
 }
@@ -68,6 +70,7 @@ impl Urls {
             verify: "https://leetcode.cn/submissions/detail/$id/check/".into(),
             favorites: "https://leetcode.cn/list/api/questions".into(),
             favorite_delete: "https://leetcode.cn/list/api/questions/$hash/$id".into(),
+            discuss: "https://leetcode.cn/problems/$slug/discussion/?currentPage=1&orderBy=most_votes&query=".into(),
         }
     }
 

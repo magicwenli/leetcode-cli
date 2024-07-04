@@ -7,7 +7,7 @@ use self::models::*;
 use self::schemas::{problems::dsl::*, tags::dsl::*};
 use self::sql::*;
 use crate::helper::test_cases_path;
-use crate::{config::Config, err::Error, plugins::LeetCode};
+use crate::{config::consts::*, config::Config, err::Error, plugins::LeetCode};
 use anyhow::anyhow;
 use colored::Colorize;
 use diesel::prelude::*;
@@ -294,23 +294,30 @@ impl Cache {
 
         File::open(code_path(&p, None)?)?.read_to_string(&mut code)?;
 
-        let code = if conf.code.edit_code_marker {
-            let begin = code.find(&conf.code.start_marker);
-            let end = code.find(&conf.code.end_marker);
-            if let (Some(l), Some(r)) = (begin, end) {
-                code.get((l + conf.code.start_marker.len())..r)
-                    .map(|s| s.to_string())
-                    .unwrap_or_else(|| code)
-            } else {
-                code
-            }
-        } else {
-            code
+
+        let code_start_str = CODE_START_TEMPLATE
+            .replace(CODE_START_MARKER, &conf.code.start_marker)
+            .replace(COMMENT_LEADING, &conf.code.comment_leading)
+            .replace(COMMENT_PREFIX, &conf.code.comment_prefix)
+            .replace(COMMENT_SUFFIX, &conf.code.comment_suffix);
+
+        let code_end_str = CODE_END_TEMPLATE
+            .replace(CODE_END_MARKER, &conf.code.end_marker)
+            .replace(COMMENT_LEADING, &conf.code.comment_leading)
+            .replace(COMMENT_PREFIX, &conf.code.comment_prefix)
+            .replace(COMMENT_SUFFIX, &conf.code.comment_suffix);
+
+        let begin = code.find(code_start_str.as_str());
+        let end = code.find(code_end_str.as_str());
+
+        let code = match (begin, end) {
+            (Some(l), Some(r)) => code.get(l + code_start_str.len()..r).unwrap_or(&code),
+            _ => &code,
         };
 
         json.insert("lang", conf.code.lang.to_string());
         json.insert("question_id", p.id.to_string());
-        json.insert("typed_code", code);
+        json.insert("typed_code", code.to_string());
 
         // pass manually data
         json.insert("name", p.name.to_string());

@@ -31,23 +31,13 @@ pub struct Problem {
 }
 
 impl Problem {
-    fn display_level(&self) -> &str {
+    pub fn display_level(&self) -> &str {
         match self.level {
             1 => "Easy",
             2 => "Medium",
             3 => "Hard",
             _ => "Unknown",
         }
-    }
-
-    pub fn desc_comment(&self, conf: &Config) -> String {
-        let mut res = String::new();
-        let comment_leading = &conf.code.comment_leading;
-        res += format!("{} Category: {}\n", comment_leading, self.category).as_str();
-        res += format!("{} Level: {}\n", comment_leading, self.display_level(),).as_str();
-        res += format!("{} Percent: {}%\n\n", comment_leading, self.percent).as_str();
-
-        res + "\n"
     }
 }
 
@@ -152,12 +142,9 @@ impl Question {
 
     pub fn desc_comment(&self, conf: &Config) -> String {
         let desc = self.t_content.render();
-
-        let mut res = desc.lines().fold("\n".to_string(), |acc, e| {
-            acc + "" + conf.code.comment_leading.as_str() + " " + e + "\n"
+        let res = desc.lines().fold("".to_string(), |acc, e| {
+            acc + "\n" + conf.code.comment_leading.as_str() + " " + e
         });
-        res += " \n";
-
         res
     }
 }

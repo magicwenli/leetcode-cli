@@ -1,5 +1,6 @@
 //! Edit command
 use super::Command;
+use crate::config::consts::*;
 use crate::{Error, Result};
 use anyhow::anyhow;
 use async_trait::async_trait;
@@ -22,6 +23,7 @@ use std::collections::HashMap;
 /// ARGS:
 ///     <id>    question id
 /// ```
+
 pub struct EditCommand;
 
 #[async_trait]
@@ -61,7 +63,6 @@ impl Command for EditCommand {
 
         let test_flag = conf.code.test;
 
-        let p_desc_comment = problem.desc_comment(&conf);
         // condition language
         if m.contains_id("lang") {
             conf.code.lang = m
@@ -83,7 +84,7 @@ impl Command for EditCommand {
             let question: Question = qr?;
 
             let mut file_code = File::create(&path)?;
-            let question_desc = question.desc_comment(&conf) + "\n";
+            let question_desc = question.desc_comment(&conf);
 
             let test_path = crate::helper::test_cases_path(&problem)?;
 
@@ -91,44 +92,46 @@ impl Command for EditCommand {
             for d in question.defs.0 {
                 if d.value == *lang {
                     flag = true;
-                    if conf.code.comment_problem_desc {
-                        file_code.write_all(p_desc_comment.as_bytes())?;
-                        file_code.write_all(question_desc.as_bytes())?;
-                    }
-                    if let Some(inject_before) = &conf.code.inject_before {
-                        for line in inject_before {
-                            file_code.write_all((line.to_string() + "\n").as_bytes())?;
-                        }
-                    }
-                    if conf.code.edit_code_marker {
-                        file_code.write_all(
-                            (conf.code.comment_leading.clone()
-                                + " "
-                                + &conf.code.start_marker
-                                + "\n")
-                                .as_bytes(),
-                        )?;
-                    }
-                    file_code.write_all((d.code.to_string() + "\n").as_bytes())?;
-                    if conf.code.edit_code_marker {
-                        file_code.write_all(
-                            (conf.code.comment_leading.clone()
-                                + " "
-                                + &conf.code.end_marker
-                                + "\n")
-                                .as_bytes(),
-                        )?;
-                    }
-                    if let Some(inject_after) = &conf.code.inject_after {
-                        for line in inject_after {
-                            file_code.write_all((line.to_string() + "\n").as_bytes())?;
-                        }
-                    }
 
-                    if test_flag {
-                        let mut file_tests = File::create(&test_path)?;
-                        file_tests.write_all(question.all_cases.as_bytes())?;
-                    }
+                    let source = include_str!("../code.tmpl")
+                        .replace(PROBLEM_TITLE, problem.name.as_str())
+                        .replace(
+                            PROBLEM_TITLE_SLUG,
+                            problem
+                                .name
+                                .to_string()
+                                .to_lowercase()
+                                .replace(" ", "_")
+                                .as_str(),
+                        )
+                        .replace(PROBLEM_ID, problem.fid.to_string().as_str())
+                        .replace(PROBLEM_DESC, question_desc.as_str())
+                        .replace(
+                            PROBLEM_LINK,
+                            conf.sys
+                                .urls
+                                .problem
+                                .replace("$slug", &problem.slug)
+                                .as_str(),
+                        )
+                        .replace(
+                            DISCUSS_LINK,
+                            conf.sys
+                                .urls
+                                .discuss
+                                .replace("$slug", &problem.slug)
+                                .as_str(),
+                        )
+                        .replace(PROBLEM_DEFAULT_CODE, d.code.to_string().as_str())
+                        .replace(PROBLEM_LEVEL, problem.display_level())
+                        .replace(PROBLEM_PERCENT, format!("{}%", problem.percent).as_str())
+                        .replace(PROBLEM_CATEGORY, problem.category.as_str())
+                        .replace(COMMENT_PREFIX, conf.code.comment_prefix.as_str())
+                        .replace(COMMENT_LEADING, conf.code.comment_leading.as_str())
+                        .replace(COMMENT_SUFFIX, conf.code.comment_suffix.as_str())
+                        .replace(CODE_START_MARKER, conf.code.start_marker.as_str())
+                        .replace(CODE_END_MARKER, conf.code.end_marker.as_str());
+                    file_code.write_all(source.as_bytes())?;
                 }
             }
 

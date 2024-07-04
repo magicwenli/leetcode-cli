@@ -118,7 +118,7 @@ impl Command for EditCommand {
                             DISCUSS_LINK,
                             conf.sys
                                 .urls
-                                .discuss
+                                .solutions
                                 .replace("$slug", &problem.slug)
                                 .as_str(),
                         )
